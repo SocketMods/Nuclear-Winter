@@ -40,14 +40,14 @@ public class MonagSplashScreen {
         if (backgroundColorSupplier == null) return;
 
         final IntSupplier wrappedSupplier = () -> {
-            processLogo();
+            replaceLogo();
             return backgroundColorSupplier.getAsInt();
         };
 
         UnsafeHelper.putObject(supplierField, null, wrappedSupplier);
     }
 
-    public static void processLogo() {
+    public static void replaceLogo() {
         AbstractTexture currentTexture = Minecraft.getInstance().textureManager.getTexture(MOJANG_LOCATION, MissingTextureAtlasSprite.getTexture());
         if (currentTexture instanceof MonagLogoTexture)
             return;
@@ -56,36 +56,20 @@ public class MonagSplashScreen {
     }
 
     static class MonagLogoTexture extends SimpleTexture {
-
         public MonagLogoTexture() {
             super(MOJANG_LOCATION);
         }
 
-        protected SimpleTexture.TextureImage getTextureImage(ResourceManager p_96194_) {
-            Minecraft minecraft = Minecraft.getInstance();
-            PathResourcePack modpack = ResourcePackLoader.getPackFor(NuclearWinter.MODID).get();
+        protected SimpleTexture.TextureImage getTextureImage(ResourceManager resourceManager) {
+            // We expect our resource pack to always be present
+            PathResourcePack pack = ResourcePackLoader.getPackFor(NuclearWinter.MODID).orElseThrow();
 
             try {
-                InputStream inputstream = modpack.getResource(PackType.CLIENT_RESOURCES, MONAG_LOCATION);
-
-                SimpleTexture.TextureImage simpletexture$textureimage;
-                try {
-                    simpletexture$textureimage = new SimpleTexture.TextureImage(new TextureMetadataSection(true, true), NativeImage.read(inputstream));
-                } catch (Throwable throwable1) {
-                    try {
-                        inputstream.close();
-                    } catch (Throwable throwable) {
-                        throwable1.addSuppressed(throwable);
-                    }
-
-                    throw throwable1;
+                try (InputStream monagStream = pack.getResource(PackType.CLIENT_RESOURCES, MONAG_LOCATION)) {
+                    return new SimpleTexture.TextureImage(new TextureMetadataSection(true, true), NativeImage.read(monagStream));
                 }
-
-                inputstream.close();
-
-                return simpletexture$textureimage;
-            } catch (IOException ioexception) {
-                return new SimpleTexture.TextureImage(ioexception);
+            } catch (IOException ex) {
+                return new SimpleTexture.TextureImage(ex);
             }
         }
     }
