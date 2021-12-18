@@ -55,7 +55,7 @@ public class UnsafeHelper {
      * @return the object cast to the target type
      */
     @SuppressWarnings("unchecked")
-    private static <T> T cast(Object obj) {
+    private static <T> @Nullable T cast(@Nullable Object obj) {
         return (T) obj;
     }
 
@@ -79,7 +79,7 @@ public class UnsafeHelper {
      * @param <T>      the return type of the function
      * @return the return value of the function
      */
-    private static <T> T calculateReturn(final Field field, @Nullable final Object instance, final UnsafeInfoFunction<T> function) {
+    private static <T> @Nullable T calculateReturn(final Field field, @Nullable final Object instance, final UnsafeInfoFunction<T> function) {
         Object base;
         long offset;
         if (instance == null) { // Static field
@@ -101,7 +101,7 @@ public class UnsafeHelper {
      */
     @FunctionalInterface
     private interface UnsafeInfoFunction<T> {
-        T apply(Object base, long offset);
+        @Nullable T apply(Object base, long offset);
     }
 
     /**

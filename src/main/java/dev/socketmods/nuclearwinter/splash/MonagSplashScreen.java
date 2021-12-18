@@ -15,6 +15,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.resource.PathResourcePack;
 import net.minecraftforge.resource.ResourcePackLoader;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,9 @@ public class MonagSplashScreen {
     public static void hook() {
         String fieldName = "f_96161" + "_"; // BRAND_BACKGROUND
         final Field supplierField = ObfuscationReflectionHelper.findField(LoadingOverlay.class, fieldName);
-        final IntSupplier backgroundColorSupplier = ObfuscationReflectionHelper.getPrivateValue(LoadingOverlay.class, null, fieldName);
+        //noinspection ConstantConditions
+        @Nullable final IntSupplier backgroundColorSupplier =
+            ObfuscationReflectionHelper.getPrivateValue(LoadingOverlay.class, null, fieldName);
 
         if (backgroundColorSupplier == null) return;
 
