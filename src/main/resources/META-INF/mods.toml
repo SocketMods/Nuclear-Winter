@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+license="MIT License"
+issueTrackerURL="https://github.com/SocketMods/Nuclear-Winter/issues"
+
+[[mods]]
+modId="nuclearwinter"
+version="${file.jarVersion}"
+displayName="Nuclear Winter"
+#updateJSONURL=""
+displayURL="https://socketmods.dev/"
+#logoFile="examplemod.png"
+credits="..."
+authors="The team at SocketMods"
+description='''
+Patrolling the Mojave almost makes you wish for a Nuclear Winter.
+'''
+
+[[dependencies.nuclearwinter]]
+modId="forge"
+mandatory=true
+versionRange="[39,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.nuclearwinter]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18,1.19)"
+ordering="NONE"
+side="BOTH"
